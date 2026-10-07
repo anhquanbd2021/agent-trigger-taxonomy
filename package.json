@@ -1,0 +1,16 @@
+{
+  "name": "agent-trigger-taxonomy-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Trigger Picker Lab — run the same workload under a condition loop, a clock loop, and a stop hook, and price each wrong pairing.",
+  "scripts": {
+    "start": "node app/server.js",
+    "report": "node scripts/report.mjs",
+    "test": "node --test \"test/*.test.mjs\"",
+    "check": "npm test && npm run report"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "ambientTurns": [
+    { "at": 0, "session": "A", "cost": 4 },
+    { "at": 1, "session": "B", "cost": 5 },
+    { "at": 2, "session": "A", "cost": 4 },
+    { "at": 5, "session": "A", "cost": 6 },
+    { "at": 6, "session": "B", "cost": 5 },
+    { "at": 7, "session": "A", "cost": 7 },
+    { "at": 8, "session": "B", "cost": 4 },
+    { "at": 9, "session": "A", "cost": 5 }
+  ],
+  "scenarios": {
+    "migration": {
+      "name": "Schema migration",
+      "kind": "converging",
+      "correctTrigger": "goal",
+      "params": { "total": 40, "step": 7 }
+    },
+    "monitor": {
+      "name": "Uptime monitor",
+      "kind": "recurring",
+      "correctTrigger": "cron",
+      "params": { "slots": 10, "downAt": [4] }
+    },
+    "guard": {
+      "name": "Budget guard",
+      "kind": "cross-cutting",
+      "correctTrigger": "hook",
+      "params": { "budget": 20 }
+    }
+  }
+}

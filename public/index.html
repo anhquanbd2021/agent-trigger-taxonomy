@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Trigger Picker Lab — run the same workload under a condition loop, a clock loop, and a stop hook, and watch each wrong pairing fail its own way.">
+  <title>Trigger Picker Lab — condition, clock, or event</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+<!-- pb-shell --><link rel="stylesheet" href="./pb-shell.css"><!-- pb-shell --><!-- pb-back --><link rel="stylesheet" href="./pb-back.css"><!-- pb-back --></head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<nav aria-label="Primary"><div class="nav-inner"><a aria-current="page" href="/">Lab</a><a href="/guide.html">Guide</a><a href="https://github.com/anhquanbd2021/agent-trigger-taxonomy">Source</a></div></nav>
+<main id="main" tabindex="-1">
+  <header class="hero">
+    <div class="hero-copy"><p class="eyebrow">Trigger Picker Lab · 3 triggers × 3 workloads</p><h1>Condition or clock — pick the trigger.</h1><p class="lede">"Keep the agent running" is three mechanisms, not one. Run each workload under a <strong>condition loop</strong> (are we done yet?), a <strong>clock loop</strong> (is it time again?), and a <strong>stop hook</strong> (did a turn just happen?) — then watch what each wrong pairing costs.</p></div>
+    <p class="warning"><strong>Safe educational demo.</strong> A deterministic simulation of trigger semantics — no LLM, no network calls, nothing leaves your browser.</p>
+  </header>
+
+  <section class="workspace" aria-label="Trigger picker">
+    <section class="panel controls" aria-labelledby="pick-title">
+      <div class="section-heading"><div><p class="eyebrow">Picker</p><h2 id="pick-title">Workload × trigger</h2></div></div>
+      <div class="pick-group">
+        <p class="group-label">Workload</p>
+        <div id="scenario-list" class="cards" role="radiogroup" aria-label="Workload"></div>
+      </div>
+      <div class="pick-group">
+        <p class="group-label">Trigger</p>
+        <div id="trigger-list" class="cards" role="radiogroup" aria-label="Trigger"></div>
+      </div>
+      <button id="run" type="button">Run the pairing</button>
+      <p class="muted tip">Tip: the diagonal of the matrix below marks each workload's natural trigger.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="trace-title">
+      <div class="section-heading"><div><p class="eyebrow">Trace</p><h2 id="trace-title">What fired, when</h2></div><span id="verdict" class="badge" role="status" aria-live="polite">Ready</span></div>
+      <p id="stats" class="stats">Pick a workload and a trigger, then run.</p>
+      <ol id="trace" class="trace" aria-label="Run trace" tabindex="0"></ol>
+      <p id="note" class="muted"></p>
+    </section>
+  </section>
+
+  <section class="panel matrix-panel" aria-labelledby="matrix-title">
+    <div class="section-heading"><div><p class="eyebrow">Mismatch matrix</p><h2 id="matrix-title">Every trigger on every workload</h2></div></div>
+    <p class="muted">The diagonal is the natural fit. Off-diagonal cells show the failure the wrong pairing buys you — click any cell to replay it.</p>
+    <div class="matrix-scroll" role="region" aria-label="Mismatch matrix — scroll horizontally to see every column" tabindex="0"><table id="matrix" class="matrix"><caption class="muted">status · runs · cost per pairing</caption></table></div>
+  </section>
+
+  <footer><p class="muted">Deterministic model of <em>when</em> control logic fires — not of agent intelligence. Honest limits in the <a href="/guide.html">guide</a>.</p></footer>
+</main>
+<script type="module" src="/app.js"></script>
+<!-- pb-shell --><a class="pb-shell" href="https://github.com/anhquanbd2021/agent-trigger-taxonomy" title="agent-trigger-taxonomy — an Article Playbook demo (view source)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="2" width="9" height="9" rx="2" fill="#2dd4bf"/><rect x="13" y="2" width="9" height="9" rx="2" fill="#2dd4bf" opacity=".45"/><rect x="2" y="13" width="9" height="9" rx="2" fill="#2dd4bf" opacity=".45"/><rect x="13" y="13" width="9" height="9" rx="4.5" fill="#2dd4bf"/></svg><b>agent-trigger-taxonomy</b><i>DEMO</i></a><!-- pb-shell --><!-- pb-back --><a class="pb-back" id="pb-back" href="https://github.com/anhquanbd2021/agent-trigger-taxonomy" title="Back to the article — agent-trigger-taxonomy">← Article <i>PLAYBOOK</i></a><script>(function(){var a=document.getElementById('pb-back');if(!a)return;var h=location.hostname;if(/^(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)/.test(h)){a.href='//'+h+':'+(/^(localhost|127\.0\.0\.1)$/.test(h)?'1234':'30082')+'/microsites/article.html?slug=agent-trigger-taxonomy';}})();</script><!-- pb-back --></body>
+</html>

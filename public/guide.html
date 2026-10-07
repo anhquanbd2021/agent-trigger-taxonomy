@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guide to the Trigger Picker Lab — what each trigger is, what each mismatch costs, and the honest limits of the simulation.">
+  <title>Trigger Picker Lab — guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+<!-- pb-shell --><link rel="stylesheet" href="./pb-shell.css"><!-- pb-shell --><!-- pb-back --><link rel="stylesheet" href="./pb-back.css"><!-- pb-back --></head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<nav aria-label="Primary"><div class="nav-inner"><a href="/">Lab</a><a aria-current="page" href="/guide.html">Guide</a><a href="https://github.com/anhquanbd2021/agent-trigger-taxonomy">Source</a></div></nav>
+<main id="main" tabindex="-1" class="guide">
+  <header class="hero"><div class="hero-copy"><p class="eyebrow">Guide</p><h1>Three triggers, three questions</h1><p class="lede">"Keep the agent running" is not one mechanism. The trigger you pick decides <em>when</em> control logic fires — and each wrong pairing fails in a different, predictable way.</p></div></header>
+
+  <h2>The taxonomy</h2>
+  <div class="table-scroll" role="region" aria-label="Trigger taxonomy table" tabindex="0">
+  <table>
+    <thead><tr><th scope="col">Trigger</th><th scope="col">Question it asks</th><th scope="col">Fires when</th><th scope="col">Natural fit</th></tr></thead>
+    <tbody>
+    <tr><td><strong>goal</strong> (condition)</td><td>"Are we done yet?"</td><td>After every unit of work, an evaluator inspects state and decides continue-or-stop</td><td>Converging tasks with a checkable finish line — migrations, refactors, backlogs</td></tr>
+    <tr><td><strong>cron</strong> (clock)</td><td>"Is it time to run again?"</td><td>On a fixed schedule, regardless of state</td><td>Recurring work with no end state — polling, monitoring, periodic checks</td></tr>
+    <tr><td><strong>hook</strong> (event)</td><td>"Did a turn just happen?"</td><td>After every turn, across sessions</td><td>Cross-cutting policy — budget guards, audit logging, forbidden-action gates</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>The three workloads</h2>
+  <ul>
+    <li><strong>Schema migration</strong> (converging) — 40 files, +7 per run. Done is checkable: <code>migrated &gt;= total</code>.</li>
+    <li><strong>Uptime monitor</strong> (recurring) — a 10-slot timeline with an outage at slot 4. There is no "done".</li>
+    <li><strong>Budget guard</strong> (cross-cutting) — 8 ambient turns across two sessions spend 4–7 units each; the cap is 20 and turn 5 breaches it.</li>
+  </ul>
+
+  <h2>What each mismatch buys you</h2>
+  <ul>
+    <li><strong>goal × monitor</strong> — "are we done yet?" has no answer; the loop burns to the safety cap (8 iterations) and still can't say anything about uptime.</li>
+    <li><strong>cron × migration</strong> — the clock can't see the finish line; it keeps paying for runs after the work is complete (4 wasted runs).</li>
+    <li><strong>hook × monitor</strong> — checks only happen when a turn happens; the slot-4 outage sits in an idle gap and is missed entirely.</li>
+    <li><strong>goal × guard</strong> — the evaluator inspects <em>its own</em> context; the spend lives in other sessions' turns, so there is nothing to check.</li>
+    <li><strong>cron × guard</strong> — the breach is detected on the next tick, after the damaging turn already ran; sampling can never block.</li>
+    <li><strong>hook × migration</strong> — progress rides whatever sessions happen to turn; work fires on unrelated turns and idles when the world is quiet.</li>
+  </ul>
+
+  <h2>The evaluator inspects — it never executes</h2>
+  <p>In goal mode, two roles are separated: the <em>executor</em> does work and changes state; the <em>evaluator</em> reads state through a read-only view and returns a verdict. In this lab that separation is enforced by code — the evaluator receives a proxy that throws on any write. A condition like "did the migration finish" is a question about the world, not a tool call.</p>
+
+  <h2>Honest limits</h2>
+  <ul>
+    <li>This is a deterministic model of <strong>trigger semantics</strong> — when control logic fires. It is not an LLM, and run() does scripted work, not reasoning.</li>
+    <li>Costs are abstract units (2 per run), not dollars; real waste scales with model and tool pricing.</li>
+    <li>Real systems combine triggers — a goal loop with a stop-hook budget cap is the common pairing; the lab treats them separately on purpose.</li>
+    <li>Hooks here model the <em>after-each-turn</em> kind (stop/notification hooks); pre-tool hooks that gate individual tool calls are a related but distinct layer.</li>
+    <li>Timeline "slots" are a simulated clock; nothing real sleeps or schedules.</li>
+  </ul>
+
+  <footer><p class="muted">Companion to the article "Condition or Clock: Three Ways to Keep an Agent Running" — <a href="/">back to the lab</a>.</p></footer>
+</main>
+<!-- pb-shell --><a class="pb-shell" href="https://github.com/anhquanbd2021/agent-trigger-taxonomy" title="agent-trigger-taxonomy — an Article Playbook demo (view source)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="2" width="9" height="9" rx="2" fill="#2dd4bf"/><rect x="13" y="2" width="9" height="9" rx="2" fill="#2dd4bf" opacity=".45"/><rect x="2" y="13" width="9" height="9" rx="2" fill="#2dd4bf" opacity=".45"/><rect x="13" y="13" width="9" height="9" rx="4.5" fill="#2dd4bf"/></svg><b>agent-trigger-taxonomy</b><i>DEMO</i></a><!-- pb-shell --><!-- pb-back --><a class="pb-back" id="pb-back" href="https://github.com/anhquanbd2021/agent-trigger-taxonomy" title="Back to the article — agent-trigger-taxonomy">← Article <i>PLAYBOOK</i></a><script>(function(){var a=document.getElementById('pb-back');if(!a)return;var h=location.hostname;if(/^(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)/.test(h)){a.href='//'+h+':'+(/^(localhost|127\.0\.0\.1)$/.test(h)?'1234':'30082')+'/microsites/article.html?slug=agent-trigger-taxonomy';}})();</script><!-- pb-back --></body>
+</html>
